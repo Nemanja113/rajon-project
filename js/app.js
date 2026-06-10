@@ -8,9 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
-
 async function loadNavbarDropdowns(districtId) {
-    
     const streetsRes = await fetch(`/rajon/api/streets.php?district_id=${districtId}`);
     const streets = await streetsRes.json();
     const streetsList = document.getElementById('streets-list-dropdown');
@@ -19,7 +17,6 @@ async function loadNavbarDropdowns(districtId) {
             `<a href="/rajon/streets.php?id=${s.id}">${s.name}</a>`
         ).join('');
     }
-
     const instRes = await fetch(`/rajon/api/institutions.php?district_id=${districtId}`);
     const institutions = await instRes.json();
     const instList = document.getElementById('institutions-list-dropdown');
@@ -28,7 +25,6 @@ async function loadNavbarDropdowns(districtId) {
             `<a href="/rajon/institutions.php?id=${i.id}">${i.name}</a>`
         ).join('');
     }
-
     const eventsRes = await fetch(`/rajon/api/events.php?district_id=${districtId}`);
     const events = await eventsRes.json();
     const eventsList = document.getElementById('events-list-dropdown');
@@ -37,7 +33,6 @@ async function loadNavbarDropdowns(districtId) {
             `<a href="/rajon/events.php?id=${e.id}">${e.title}</a>`
         ).join('');
     }
-
     const residentsRes = await fetch(`/rajon/api/residents.php?district_id=${districtId}`);
     const residents = await residentsRes.json();
     const residentsList = document.getElementById('residents-list-dropdown');
@@ -46,7 +41,6 @@ async function loadNavbarDropdowns(districtId) {
             `<a href="/rajon/residents.php?id=${r.id}">${r.name} ${r.surname}</a>`
         ).join('');
     }
-
     const aptsRes = await fetch(`/rajon/api/apartments.php?district_id=${districtId}`);
     const apartments = await aptsRes.json();
     const aptsList = document.getElementById('apartments-list-dropdown');

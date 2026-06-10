@@ -17,7 +17,6 @@
     <button class="btn" onclick="openAddModal()">Добавить район</button>
     <?php endif; ?>
     <div id="districts-list" class="cards-grid"></div>
-
     <?php if ($_SESSION['role'] === 'admin'): ?>
     <dialog id="modal">
         <center><h2 id="modal-title">Добавить район</h2></center>

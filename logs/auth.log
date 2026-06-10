@@ -26,3 +26,15 @@
 2026-06-09 08:49:48 | ip=127.0.0.1 | login=Marko | action=REGISTER
 2026-06-09 08:49:56 | ip=127.0.0.1 | login=Marko | action=SUCCESS_LOGIN
 2026-06-09 08:50:42 | ip=127.0.0.1 | login=Marko | action=LOGOUT
+2026-06-09 10:49:34 | ip=127.0.0.1 | login=Marko | action=FAIL_LOGIN
+2026-06-09 10:49:40 | ip=127.0.0.1 | login=Marko | action=SUCCESS_LOGIN
+2026-06-09 10:56:04 | ip=127.0.0.1 | login=Marko | action=LOGOUT
+2026-06-09 10:58:12 | ip=127.0.0.1 | login=NemanjaMaster | action=SUCCESS_LOGIN
+2026-06-09 12:20:09 | ip=::1 | login=NemanjaMaster | action=SUCCESS_LOGIN
+2026-06-09 13:01:18 | ip=::1 | login=NemanjaMaster | action=LOGOUT
+2026-06-09 13:03:36 | ip=::1 | login=branko | action=REGISTER
+2026-06-09 13:04:01 | ip=::1 | login=NemanjaMaster | action=SUCCESS_LOGIN
+2026-06-09 13:11:16 | ip=::1 | login=NemanjaMaster | action=LOGOUT
+2026-06-09 13:11:22 | ip=::1 | login=Marko | action=SUCCESS_LOGIN
+2026-06-09 13:11:47 | ip=::1 | login=Marko | action=LOGOUT
+2026-06-09 13:17:15 | ip=::1 | login=NemanjaMaster | action=SUCCESS_LOGIN

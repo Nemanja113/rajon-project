@@ -59,7 +59,7 @@ dialog#modal::backdrop {
 dialog#modal h2 {
     font-size: 22px;
     font-weight: 600;
-    margin-bottom: 20px; /* Povećano da napravi lep razmak umesto <br> i <hr> */
+    margin-bottom: 20px; 
     text-align: center;
 }
 
@@ -67,10 +67,9 @@ dialog#modal h2 {
     display: flex;
     flex-direction: column;
     margin-bottom: 16px;
-    width: 100%; /* Osigurava punu širinu */
+    width: 100%;
 }
 
-/* Podrška za sve forme: stanove, ulice i ustanove */
 #apartment-form label,
 #street-form label,
 #institution-form label {
@@ -158,7 +157,6 @@ dialog#modal h2 {
     margin-top: 20px;
 }
 
-/* Kartice (za stanove i ustanove) */
 .apartment-card,
 .institution-card {
     background: #162a4d;

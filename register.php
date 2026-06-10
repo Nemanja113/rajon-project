@@ -5,17 +5,13 @@ if (session_status() === PHP_SESSION_NONE) {
     }
     session_start();
 }
-
 if (isset($_SESSION['user_id'])) {
     header('Location: /rajon/index.php');
     exit;
 }
-
 require_once 'config/database.php';
 require_once 'core/logger.php';
-
 $error = '';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $name = trim($_POST['name'] ?? '');
@@ -23,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
     $phone = trim($_POST['phone'] ?? '');
-
     if ($username && $name && $surname && $email && $password) {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = 'Неверный формат email';
@@ -42,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $hash = password_hash($password, PASSWORD_DEFAULT);
                         $stmt = $pdo->prepare("INSERT INTO users (username, name, surname, email, phone, password_hash, role) VALUES (?, ?, ?, ?, ?, ?, 'user')");
                         $stmt->execute([$username, $name, $surname, $email, $phone, $hash]);
-                        
                         writeLog($username, 'REGISTER');
                         header('Location: /rajon/login.php');
                         exit;
@@ -61,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <html lang="ru">
 <head>
     <meta charset="UTF-8">

@@ -2,7 +2,6 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
 $currentDistrict = $_GET['rajon'] ?? '';
 $brandName = !empty($currentDistrict) ? htmlspecialchars($currentDistrict) : 'Арбат';
 ?>
@@ -11,7 +10,6 @@ $brandName = !empty($currentDistrict) ? htmlspecialchars($currentDistrict) : 'А
     <div class="navbar-brand">
         <a href="/rajon/districts.php"><?php echo mb_convert_case($brandName, MB_CASE_TITLE, "UTF-8"); ?></a>
     </div>
-    
     <div class="navbar-links">
         <div class="nav-item">
             <a href="/rajon/index.php">Главная</a>
@@ -31,7 +29,6 @@ $brandName = !empty($currentDistrict) ? htmlspecialchars($currentDistrict) : 'А
                 <?php endif; ?>
             </div>
         </div>
-
         <div class="dropdown">
             <a href="/rajon/institutions.php?district_id=5">Учреждения</a>
             <div class="dropdown-menu" id="institutions-dropdown">
@@ -42,7 +39,6 @@ $brandName = !empty($currentDistrict) ? htmlspecialchars($currentDistrict) : 'А
                 <?php endif; ?>
             </div>
         </div>
-
         <div class="dropdown">
             <a href="/rajon/events.php?district_id=5">События</a>
             <div class="dropdown-menu" id="events-dropdown">
@@ -53,7 +49,6 @@ $brandName = !empty($currentDistrict) ? htmlspecialchars($currentDistrict) : 'А
                 <?php endif; ?>
             </div>
         </div>
-
         <div class="dropdown">
             <a href="/rajon/apartments.php?district_id=5">Квартиры</a>
             <div class="dropdown-menu" id="apartments-dropdown">
@@ -64,14 +59,12 @@ $brandName = !empty($currentDistrict) ? htmlspecialchars($currentDistrict) : 'А
                 <?php endif; ?>
             </div>
         </div>
-
         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
         <div class="nav-item">
             <a href="/rajon/users.php">Пользователи</a>
         </div>
         <?php endif; ?>
     </div>
-    
     <div class="navbar-actions">
         <a href="/rajon/cart.php" class="cart-link" title="Корзина">
             🛒 <span id="cart-badge" class="cart-badge">0</span>
@@ -79,14 +72,12 @@ $brandName = !empty($currentDistrict) ? htmlspecialchars($currentDistrict) : 'А
         <a href="/rajon/logout.php" class="btn-logout">Выйти</a>
     </div>
 </nav>
-
 <script>
 async function updateCartBadge() {
     try {
         const response = await fetch('/rajon/api/cart.php');
         const items = await response.json();
         const badge = document.getElementById('cart-badge');
-        
         if (items && items.length > 0) {
             badge.textContent = items.length;
             badge.style.display = 'inline-block';

@@ -1,13 +1,10 @@
 document.addEventListener('DOMContentLoaded', loadCart);
-
 async function loadCart() {
     try {
         const res = await fetch('/rajon/api/cart.php');
         const items = await res.json();
         const list = document.getElementById('cart-list');
-
         if (!list) return;
-
         if (!items || items.length === 0) {
             list.innerHTML = `
                 <div class="cart-block empty-cart-block">
@@ -16,14 +13,11 @@ async function loadCart() {
             `;
             return;
         }
-
         let grandTotal = 0;
         let rowsHtml = '';
-
         items.forEach(i => {
             grandTotal += parseFloat(i.total || 0);
             const detailsText = `${i.days} дн. х ${parseFloat(i.price).toFixed(2)} руб.`;
-
             rowsHtml += `
                 <div class="cart-item-row" id="cart-item-${i.id}">
                     <span class="col-title-val">${escapeHtml(i.title)}</span>
@@ -36,7 +30,6 @@ async function loadCart() {
                 </div>
             `;
         });
-
         list.innerHTML = `
             <div class="cart-block">
                 <div class="cart-table-header">
@@ -46,11 +39,9 @@ async function loadCart() {
                     <span class="col-total">Итого</span>
                     <span class="col-actions"></span>
                 </div>
-                
                 <div class="cart-rows-wrapper">
                     ${rowsHtml}
                 </div>
-                
                 <div class="cart-block-footer">
                     <div class="cart-total-inside">
                         <span>Общая сумма:</span>
@@ -60,17 +51,14 @@ async function loadCart() {
                 </div>
             </div>
         `;
-
     } catch (error) {
         console.error('Ошибка при загрузке корзины:', error);
     }
 }
-
 document.getElementById('cart-list')?.addEventListener('click', function(e) {
     const btn = e.target.closest('.btn-delete-row');
     if (btn) removeFromCart(btn.dataset.id);
 });
-
 function escapeHtml(val) {
     if (val === null || val === undefined) return '';
     return String(val)
@@ -79,7 +67,6 @@ function escapeHtml(val) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
 }
-
 async function removeFromCart(cartId) {
     if (!confirm('Удалить из корзины?')) return;
     try {
@@ -90,16 +77,13 @@ async function removeFromCart(cartId) {
         console.error('Ошибка при удалении:', error);
     }
 }
-
 async function checkout() {
     if (!confirm('Оплатить все товары в корзине?')) return;
     const list = document.getElementById('cart-list');
     list.innerHTML = '<p class="no-items">Обработка заказа...</p>';
-
     try {
         const res = await fetch('/rajon/api/process_payment.php', { method: 'POST' });
         const data = await res.json();
-
         if (data.success) {
             list.innerHTML = `
                 <div class="cart-block" style="text-align:center; padding:40px;">

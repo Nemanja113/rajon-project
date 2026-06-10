@@ -1,18 +1,14 @@
 <?php
 require_once 'core/auth_check.php';
-
 $district_id = isset($_GET['district_id']) ? (int)$_GET['district_id'] : 0;
-
 if (!$district_id) {
     header('Location: /rajon/districts.php');
     exit;
 }
-
 require_once 'config/database.php';
 $stmt = $pdo->prepare("SELECT name FROM districts WHERE id = ?");
 $stmt->execute([$district_id]);
 $district = $stmt->fetch(PDO::FETCH_ASSOC);
-
 if (!$district) {
     header('Location: /rajon/districts.php');
     exit;

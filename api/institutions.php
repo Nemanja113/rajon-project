@@ -6,13 +6,10 @@ if (!isset($_SESSION['user_id'])) {
     echo json_encode(['error' => 'Unauthorized']);
     exit;
 }
-
 require_once '../config/database.php';
-
 $method      = $_SERVER['REQUEST_METHOD'];
 $id          = $_GET['id'] ?? null;
 $district_id = $_GET['district_id'] ?? null;
-
 if ($method === 'GET' && !$id) {
     if ($district_id) {
         $stmt = $pdo->prepare("SELECT * FROM institutions WHERE district_id = ? ORDER BY id");
@@ -23,7 +20,6 @@ if ($method === 'GET' && !$id) {
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     exit;
 }
-
 if ($method === 'GET' && $id) {
     $stmt = $pdo->prepare("SELECT * FROM institutions WHERE id = ?");
     $stmt->execute([$id]);
@@ -32,26 +28,20 @@ if ($method === 'GET' && $id) {
     echo json_encode($row);
     exit;
 }
-
 if ($method === 'POST') {
     if ($_SESSION['role'] !== 'admin') { http_response_code(403); echo json_encode(['error' => 'Forbidden']); exit; }
-
     $name             = $_POST['name']             ?? '';
     $institution_type = ($_POST['institution_type'] ?? '') !== '' ? $_POST['institution_type'] : null;
     $address          = ($_POST['address']          ?? '') !== '' ? $_POST['address']          : null;
     $phone            = ($_POST['phone']            ?? '') !== '' ? $_POST['phone']            : null;
     $working_hours    = ($_POST['working_hours']    ?? '') !== '' ? $_POST['working_hours']    : null;
     $image            = null;
-
     if (!$name) { http_response_code(400); echo json_encode(['error' => 'Name is required']); exit; }
-
-    // ── UPDATE ──────────────────────────────────────────────────────────────
     if ($id) {
         $stmt = $pdo->prepare("SELECT image FROM institutions WHERE id = ?");
         $stmt->execute([$id]);
         $existing = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($existing) $image = $existing['image'];
-
         if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
             $ext      = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
             $filename = uniqid('institution_') . '.' . $ext;
@@ -60,22 +50,17 @@ if ($method === 'POST') {
             move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename);
             $image = $filename;
         }
-
         $stmt = $pdo->prepare(
             "UPDATE institutions SET name=?, institution_type=?, address=?, phone=?, working_hours=?, image=? WHERE id=?"
         );
         $stmt->execute([$name, $institution_type, $address, $phone, $working_hours, $image, $id]);
-
         $stmt2 = $pdo->prepare("SELECT * FROM institutions WHERE id = ?");
         $stmt2->execute([$id]);
         echo json_encode($stmt2->fetch(PDO::FETCH_ASSOC));
         exit;
     }
-
-    // ── INSERT ──────────────────────────────────────────────────────────────
     $post_district_id = ($_POST['district_id'] ?? '') !== '' ? (int)$_POST['district_id'] : null;
     if (!$post_district_id) { http_response_code(400); echo json_encode(['error' => 'District ID is required']); exit; }
-
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
         $ext      = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
         $filename = uniqid('institution_') . '.' . $ext;
@@ -84,7 +69,6 @@ if ($method === 'POST') {
         move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename);
         $image = $filename;
     }
-
     $stmt = $pdo->prepare(
         "INSERT INTO institutions (name, district_id, institution_type, address, phone, working_hours, image)
          VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *"
@@ -93,7 +77,6 @@ if ($method === 'POST') {
     echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
     exit;
 }
-
 if ($method === 'DELETE' && $id) {
     if ($_SESSION['role'] !== 'admin') { http_response_code(403); echo json_encode(['error' => 'Forbidden']); exit; }
     $stmt = $pdo->prepare("DELETE FROM institutions WHERE id = ?");
@@ -101,6 +84,5 @@ if ($method === 'DELETE' && $id) {
     echo json_encode(['success' => true]);
     exit;
 }
-
 http_response_code(405);
 echo json_encode(['error' => 'Method not allowed']);

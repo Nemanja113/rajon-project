@@ -1,16 +1,13 @@
 const API = '/rajon/api/users.php'; 
 const modal = document.getElementById('modal');
 const form = document.getElementById('user-form');
-
 async function loadUsers() {
     try {
         const response = await fetch(API);
         if (!response.ok) throw new Error('Сетевой ответ был неудовлетворительным');
         const users = await response.json();
-        
         const list = document.getElementById('users-list');
         list.innerHTML = '';
-        
         users.forEach(user => {
             list.innerHTML += `
                 <div class="user-card">
@@ -32,30 +29,24 @@ async function loadUsers() {
         console.error('Ошибка при загрузке пользователей:', e);
     }
 }
-
 function openAddModal() {
     form.reset();
     document.getElementById('user-id').value = '';
     document.getElementById('modal-title').textContent = 'Добавить пользователя';
     modal.showModal();
 }
-
 function closeModal() {
     modal.close();
 }
-
 async function deleteUser(id) {
     if (!confirm('Вы уверены, что хотите удалить этого пользователя?')) {
         return;
     }
-
     try {
         const response = await fetch(`${API}?id=${id}`, {
             method: 'DELETE'
         });
-
         const result = await response.json();
-
         if (response.ok) {
             alert('Пользователь успешно удален!');
             loadUsers(); 
@@ -67,10 +58,8 @@ async function deleteUser(id) {
         alert('Ошибка при соединении с сервером');
     }
 }
-
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const data = {
         name: document.getElementById('user-name').value,
         surname: document.getElementById('user-surname').value,
@@ -79,16 +68,13 @@ form.addEventListener('submit', async (e) => {
         phone: document.getElementById('user-phone') ? document.getElementById('user-phone').value : null,
         password: document.getElementById('user-password').value 
     };
-
     try {
         const response = await fetch(API, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
-
         const result = await response.json();
-
         if (response.ok) {
             closeModal();
             loadUsers();
@@ -101,5 +87,4 @@ form.addEventListener('submit', async (e) => {
         alert('Ошибка при соединении с сервером');
     }
 });
-
 loadUsers();

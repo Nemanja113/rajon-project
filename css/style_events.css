@@ -47,13 +47,12 @@ dialog#modal {
     margin: auto;
     color: #ffffff;
     max-height: 95vh;
-    overflow: hidden; /* UKLONJEN SCROLLBAR */
+    overflow: hidden; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 dialog#modal::backdrop {
     background: rgba(0, 0, 0, 0.6);
-    /* BLUR JE UKLONJEN ODAVDE */
 }
 
 dialog#modal h2 {
@@ -70,7 +69,6 @@ dialog#modal h2 {
     width: 100%;
 }
 
-/* Podrška za sve forme: stanove, ulice i ustanove */
 #apartment-form label,
 #street-form label,
 #institution-form label,

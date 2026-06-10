@@ -37,9 +37,6 @@ body {
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* ==========================================================================
-   MODALI (Glavni i Rezervacije) - BEZ SCROLLBAR-A I BLUR-A
-   ========================================================================== */
 dialog#modal, 
 dialog#reservation-modal {
     background: #162a4d;
@@ -51,13 +48,13 @@ dialog#reservation-modal {
     margin: auto;
     color: #ffffff;
     max-height: 95vh;
-    overflow: hidden; /* POTPUNO UKLONJEN SCROLLBAR */
+    overflow: hidden; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 dialog#modal::backdrop, 
 dialog#reservation-modal::backdrop {
-    background: rgba(0, 0, 0, 0.6); /* BEZ BLUR-A */
+    background: rgba(0, 0, 0, 0.6); 
 }
 
 dialog#modal h2, 
@@ -68,10 +65,6 @@ dialog#reservation-modal h2 {
     text-align: center;
 }
 
-/* ==========================================================================
-   FORME - UNIVERZALNO REĐANJE JEDNO ISPOD DRUGOG (100% ŠIRINA)
-   ========================================================================== */
-/* Primenjuje se na sve tvoje forme: stanove, rezervacije, ustanove, rajone... */
 #apartment-form label,
 #reservation-form label,
 #institution-form label,
@@ -103,10 +96,9 @@ form select {
     color: #ffffff;
     font-family: inherit;
     font-size: 14px;
-    margin-bottom: 14px; /* Razmak između elemenata */
+    margin-bottom: 14px; 
 }
 
-/* Fokus stanja */
 #apartment-form input:focus,
 #apartment-form textarea:focus,
 #apartment-form select:focus,
@@ -126,14 +118,10 @@ form textarea {
     min-height: 80px;
 }
 
-/* Specijalno za fajl input da ne guta padding */
 form input[type="file"] {
     padding: 8px 12px;
 }
 
-/* ==========================================================================
-   ELEMENTI I KARTICE
-   ========================================================================== */
 .btn {
     background: #38a169;
     color: #ffffff;

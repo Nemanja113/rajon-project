@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadEvents(DISTRICT_ID);
-
     if (IS_ADMIN && window.location.search.includes('add=1')) {
         openAddModal();
     }
-
     document.getElementById('events-list').addEventListener('click', function(e) {
         const editBtn = e.target.closest('.btn-edit');
         if (editBtn) {
@@ -24,19 +22,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
 async function loadEvents(districtId) {
     try {
         const res = await fetch(`/rajon/api/events.php?district_id=${districtId}`);
         const events = await res.json();
         const list = document.getElementById('events-list');
         list.innerHTML = '';
-
         if (!events || events.length === 0) {
             list.innerHTML = '<p class="no-items">Событий пока нет</p>';
             return;
         }
-
         events.forEach(e => {
             const card = document.createElement('div');
             card.className = 'street-card';
@@ -72,7 +67,6 @@ async function loadEvents(districtId) {
         console.error("Greška pri učitavanju događaja:", err);
     }
 }
-
 function escapeHtml(val) {
     if (val === null || val === undefined) return '';
     return String(val)
@@ -81,19 +75,16 @@ function escapeHtml(val) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
 }
-
 function escapeAttr(val) {
     if (val === null || val === undefined) return '';
     return String(val).replace(/"/g, '&quot;');
 }
-
 function openAddModal() {
     document.getElementById('modal-title').textContent = 'Добавить событие';
     document.getElementById('event-form').reset();
     document.getElementById('event-id').value = '';
     document.getElementById('modal').showModal();
 }
-
 function openEditModal(id, title, date, location, organizer, visitors, description) {
     document.getElementById('modal-title').textContent = 'Изменить событие';
     document.getElementById('event-id').value          = id;
@@ -105,16 +96,12 @@ function openEditModal(id, title, date, location, organizer, visitors, descripti
     document.getElementById('event-description').value = description;
     document.getElementById('modal').showModal();
 }
-
 function closeModal() {
     document.getElementById('modal').close();
 }
-
 document.getElementById('event-form')?.addEventListener('submit', async function(e) {
     e.preventDefault();
-
     const id = document.getElementById('event-id').value;
-
     const formData = new FormData();
     formData.append('title',          document.getElementById('event-title').value);
     formData.append('event_date',     document.getElementById('event-date').value);
@@ -123,18 +110,14 @@ document.getElementById('event-form')?.addEventListener('submit', async function
     formData.append('organizer',      document.getElementById('event-organizer').value);
     formData.append('visitors_count', document.getElementById('event-visitors').value);
     formData.append('description',    document.getElementById('event-description').value);
-
     const imageFile = document.getElementById('event-image').files[0];
     if (imageFile) formData.append('image', imageFile);
-
     try {
         const res = await fetch('/rajon/api/events.php' + (id ? '?id=' + id : ''), {
             method: 'POST',
             body: formData
         });
-
         const result = await res.json();
-
         if (res.ok) {
             closeModal();
             loadEvents(DISTRICT_ID);
@@ -146,7 +129,6 @@ document.getElementById('event-form')?.addEventListener('submit', async function
         alert("Системная ошибка, проверьте консоль.");
     }
 });
-
 async function deleteEvent(id) {
     if (!confirm('Удалить событие?')) return;
     const res = await fetch('/rajon/api/events.php?id=' + id, {

@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadApartments(DISTRICT_ID);
-
     if (IS_ADMIN && window.location.search.includes('add=1')) {
         openAddModal();
     }
-
     document.getElementById('apartments-list').addEventListener('click', function(e) {
         const editBtn = e.target.closest('.btn-edit');
         if (editBtn) {
@@ -17,12 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 editBtn.dataset.description
             );
         }
-        
         const deleteBtn = e.target.closest('.btn-delete');
         if (deleteBtn) {
             deleteApartment(deleteBtn.dataset.id);
         }
-        
         const reserveBtn = e.target.closest('.btn-reserve');
         if (reserveBtn) {
             openReservationModal(
@@ -33,19 +29,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
 async function loadApartments(districtId) {
     try {
         const res = await fetch(`/rajon/api/apartments.php?district_id=${districtId}`);
         const apartments = await res.json();
         const list = document.getElementById('apartments-list');
         list.innerHTML = '';
-
         if (!apartments || apartments.length === 0) {
             list.innerHTML = '<p class="no-items">Квартир пока нет</p>';
             return;
         }
-
         apartments.forEach(a => {
             const card = document.createElement('div');
             card.className = 'street-card';
@@ -86,7 +79,6 @@ async function loadApartments(districtId) {
         console.error("Ошибка при загрузке квартир:", err);
     }
 }
-
 function escapeHtml(val) {
     if (val === null || val === undefined) return '';
     return String(val)
@@ -95,19 +87,16 @@ function escapeHtml(val) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
 }
-
 function escapeAttr(val) {
     if (val === null || val === undefined) return '';
     return String(val).replace(/"/g, '&quot;');
 }
-
 function openAddModal() {
     document.getElementById('modal-title').textContent = 'Добавить квартиру';
     document.getElementById('apartment-form').reset();
     document.getElementById('apartment-id').value = '';
     document.getElementById('modal').showModal();
 }
-
 function openEditModal(id, floor, rooms, area, price, description) {
     document.getElementById('modal-title').textContent = 'Изменить квартиру';
     document.getElementById('apartment-id').value          = id;
@@ -118,11 +107,9 @@ function openEditModal(id, floor, rooms, area, price, description) {
     document.getElementById('apartment-description').value = description;
     document.getElementById('modal').showModal();
 }
-
 function closeModal() {
     document.getElementById('modal').close();
 }
-
 function openReservationModal(apartmentId, price, rooms) {
     document.getElementById('reserve-apartment-id').value = apartmentId;
     document.getElementById('reserve-apartment-price').value = price;
@@ -130,14 +117,11 @@ function openReservationModal(apartmentId, price, rooms) {
     document.getElementById('reserve-days').value = 1;
     document.getElementById('reservation-modal').showModal();
 }
-
 function closeReservationModal() {
     document.getElementById('reservation-modal').close();
 }
-
 document.getElementById('apartment-form')?.addEventListener('submit', async function(e) {
     e.preventDefault();
-
     const id = document.getElementById('apartment-id').value;
     const formData = new FormData();
     formData.append('district_id',   DISTRICT_ID);
@@ -146,18 +130,14 @@ document.getElementById('apartment-form')?.addEventListener('submit', async func
     formData.append('area_m2',       document.getElementById('apartment-area').value);
     formData.append('price_per_day', document.getElementById('apartment-price').value);
     formData.append('description',   document.getElementById('apartment-description').value);
-
     const imageFile = document.getElementById('apartment-image').files[0];
     if (imageFile) formData.append('image', imageFile);
-
     try {
         const res = await fetch('/rajon/api/apartments.php' + (id ? '?id=' + id : ''), {
             method: 'POST',
             body: formData
         });
-
         const result = await res.json();
-
         if (res.ok) {
             closeModal();
             loadApartments(DISTRICT_ID);
@@ -169,15 +149,12 @@ document.getElementById('apartment-form')?.addEventListener('submit', async func
         alert("Системная ошибка, проверьте консоль.");
     }
 });
-
 document.getElementById('reservation-form')?.addEventListener('submit', async function(e) {
     e.preventDefault();
-
     const itemId = document.getElementById('reserve-apartment-id').value;
     const price = document.getElementById('reserve-apartment-price').value;
     const title = document.getElementById('reserve-apartment-title').value;
     const days = document.getElementById('reserve-days').value;
-
     const cartData = {
         item_id: parseInt(itemId),
         type: 'apartment',
@@ -186,7 +163,6 @@ document.getElementById('reservation-form')?.addEventListener('submit', async fu
         days: parseInt(days),
         quantity: 1
     };
-
     try {
         const res = await fetch('/rajon/api/cart.php', {
             method: 'POST',
@@ -195,9 +171,7 @@ document.getElementById('reservation-form')?.addEventListener('submit', async fu
             },
             body: JSON.stringify(cartData)
         });
-
         const result = await res.json();
-
         if (res.ok && result.success) {
             alert('Квартира успешно добавлена в корзину!');
             closeReservationModal();
@@ -210,7 +184,6 @@ document.getElementById('reservation-form')?.addEventListener('submit', async fu
         alert('Системная ошибка при добавлении в корзину.');
     }
 });
-
 async function deleteApartment(id) {
     if (!confirm('Вы уверены, что хотите удалить эту квартиру?')) return;
     try {

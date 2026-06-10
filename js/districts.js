@@ -1,24 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadDistricts();
 });
-
 function openAddModal() {
     document.getElementById('modal-title').textContent = 'Добавить район';
     document.getElementById('district-form').reset();
     document.getElementById('district-id').value = '';
     document.getElementById('modal').showModal();
 }
-
 function closeModal() {
     document.getElementById('modal').close();
 }
-
 async function loadDistricts() {
     const res = await fetch('/rajon/api/districts.php');
     const districts = await res.json();
     const list = document.getElementById('districts-list');
     list.innerHTML = '';
-
     districts.forEach(d => {
         const card = document.createElement('div');
         card.className = 'district-card';
@@ -41,7 +37,6 @@ async function loadDistricts() {
                 ` : ''}
             </div>
         `;
-
         if (IS_ADMIN) {
             const editBtn = card.querySelector('.btn-edit');
             const deleteBtn = card.querySelector('.btn-delete');
@@ -55,11 +50,9 @@ async function loadDistricts() {
             );
             deleteBtn.onclick = () => deleteDistrict(deleteBtn.dataset.id);
         }
-
         list.appendChild(card);
     });
 }
-
 function openEditModal(id, name, description, area, population, founded) {
     document.getElementById('modal-title').textContent = 'Изменить район';
     document.getElementById('district-id').value          = id;
@@ -71,11 +64,9 @@ function openEditModal(id, name, description, area, population, founded) {
     document.getElementById('district-image').value       = '';
     document.getElementById('modal').showModal();
 }
-
 document.getElementById('district-form')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     const id = document.getElementById('district-id').value;
-
     const formData = new FormData();
     formData.append('name',         document.getElementById('district-name-input').value.trim());
     formData.append('description',  document.getElementById('district-description').value.trim());
@@ -83,15 +74,12 @@ document.getElementById('district-form')?.addEventListener('submit', async funct
     formData.append('population',   document.getElementById('district-population').value);
     formData.append('founded_year', document.getElementById('district-founded').value);
     if (id) formData.append('_method', 'PUT');
-
     const imageFile = document.getElementById('district-image').files[0];
     if (imageFile) formData.append('image', imageFile);
-
     const res = await fetch('/rajon/api/districts.php' + (id ? '?id=' + id : ''), {
         method: 'POST',
         body: formData
     });
-
     const data = await res.json();
     if (res.ok && data.success) {
         closeModal();
@@ -100,7 +88,6 @@ document.getElementById('district-form')?.addEventListener('submit', async funct
         alert(data.error || 'Ошибка');
     }
 });
-
 async function deleteDistrict(id) {
     if (!confirm('Удалить район?')) return;
     const res = await fetch('/rajon/api/districts.php?id=' + id, {
@@ -108,7 +95,6 @@ async function deleteDistrict(id) {
     });
     if (res.ok) loadDistricts();
 }
-
 function escapeHtml(str) {
     if (!str) return '';
     return str.replace(/[&<>]/g, function(m) {
