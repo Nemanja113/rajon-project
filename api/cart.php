@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
-    echo json_encode(['error' => 'Unauthorized']);
+    echo json_encode(['error' => 'Не авторизован']);
     exit;
 }
 require_once '../config/database.php';
@@ -32,7 +32,7 @@ if ($method === 'POST') {
         echo json_encode(['success' => true]);
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Greška u bazi: ' . $e->getMessage()]);
+        echo json_encode(['error' => 'Ошибка базы данных: ' . $e->getMessage()]);
     }
     exit;
 }
@@ -44,4 +44,4 @@ if ($method === 'DELETE') {
     exit;
 }
 http_response_code(405);
-echo json_encode(['error' => 'Method not allowed']);
+echo json_encode(['error' => 'Метод не поддерживается']);

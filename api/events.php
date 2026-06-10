@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
-    echo json_encode(['error' => 'Unauthorized']);
+    echo json_encode(['error' => 'Не авторизован']);
     exit;
 }
 require_once '../config/database.php';
@@ -24,12 +24,12 @@ if ($method === 'GET' && $id) {
     $stmt = $pdo->prepare("SELECT * FROM events WHERE id = ?");
     $stmt->execute([$id]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$row) { http_response_code(404); echo json_encode(['error' => 'Not found']); exit; }
+    if (!$row) { http_response_code(404); echo json_encode(['error' => 'Не найдено']); exit; }
     echo json_encode($row);
     exit;
 }
 if ($method === 'POST') {
-    if ($_SESSION['role'] !== 'admin') { http_response_code(403); echo json_encode(['error' => 'Forbidden']); exit; }
+    if ($_SESSION['role'] !== 'admin') { http_response_code(403); echo json_encode(['error' => 'Запрещено']); exit; }
     $title          = $_POST['title']      ?? '';
     $event_date     = $_POST['event_date'] ?? '';
     $location       = ($_POST['location']       ?? '') !== '' ? $_POST['location']       : null;
@@ -39,7 +39,7 @@ if ($method === 'POST') {
     $image          = null;
     if (!$title || !$event_date) {
         http_response_code(400);
-        echo json_encode(['error' => 'Title and date are required']);
+        echo json_encode(['error' => 'Название и дата обязательны']);
         exit;
     }
     if ($id) {
@@ -67,7 +67,7 @@ if ($method === 'POST') {
     $post_district_id = ($_POST['district_id'] ?? '') !== '' ? (int)$_POST['district_id'] : null;
     if (!$post_district_id) {
         http_response_code(400);
-        echo json_encode(['error' => 'District ID is required']);
+        echo json_encode(['error' => 'ID района обязателен']);
         exit;
     }
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
@@ -87,11 +87,11 @@ if ($method === 'POST') {
     exit;
 }
 if ($method === 'DELETE' && $id) {
-    if ($_SESSION['role'] !== 'admin') { http_response_code(403); echo json_encode(['error' => 'Forbidden']); exit; }
+    if ($_SESSION['role'] !== 'admin') { http_response_code(403); echo json_encode(['error' => 'Запрещено']); exit; }
     $stmt = $pdo->prepare("DELETE FROM events WHERE id = ?");
     $stmt->execute([$id]);
     echo json_encode(['success' => true]);
     exit;
 }
 http_response_code(405);
-echo json_encode(['error' => 'Method not allowed']);
+echo json_encode(['error' => 'Метод не поддерживается']);

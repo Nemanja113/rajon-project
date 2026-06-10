@@ -61,7 +61,7 @@ async function loadInstitutions(districtId) {
             list.appendChild(card);
         });
     } catch (err) {
-        console.error("Greška pri učitavanju ustanova:", err);
+        console.error("Ошибка при загрузке учреждений:", err);
     }
 }
 function escapeHtml(val) {
@@ -120,7 +120,7 @@ document.getElementById('institution-form')?.addEventListener('submit', async fu
             alert("Ошибка: " + (result.error || 'Неизвестная ошибка'));
         }
     } catch (error) {
-        console.error("Greška:", error);
+        console.error("Ошибка: ", error);
         alert("Системная ошибка, проверьте консоль.");
     }
 });

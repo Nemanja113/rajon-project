@@ -61,7 +61,7 @@ async function loadStreets(districtId) {
             list.appendChild(card);
         });
     } catch (err) {
-        console.error("Greška pri učitavanju ulica:", err);
+        console.error("Ошибка при загрузке улиц:", err);
     }
 }
 function escapeHtml(val) {

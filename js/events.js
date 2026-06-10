@@ -64,7 +64,7 @@ async function loadEvents(districtId) {
             list.appendChild(card);
         });
     } catch (err) {
-        console.error("Greška pri učitavanju događaja:", err);
+        console.error("Ошибка при загрузке событий:", err);
     }
 }
 function escapeHtml(val) {
@@ -125,7 +125,7 @@ document.getElementById('event-form')?.addEventListener('submit', async function
             alert("Ошибка: " + (result.error || 'Неизвестная ошибка'));
         }
     } catch (error) {
-        console.error("Greška:", error);
+        console.error("Ошибка:", error);
         alert("Системная ошибка, проверьте консоль.");
     }
 });

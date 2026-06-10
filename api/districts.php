@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 if (session_status() === PHP_SESSION_NONE) session_start(); 
 if (!isset($_SESSION['user_id'])) { 
     http_response_code(401); 
-    echo json_encode(['error' => 'Unauthorized']); 
+    echo json_encode(['error' => 'Не авторизован']); 
     exit; 
 } 
 require_once '../config/database.php'; 
@@ -21,22 +21,31 @@ if ($method === 'GET' && $id) {
     $stmt = $pdo->prepare("SELECT * FROM districts WHERE id = ?"); 
     $stmt->execute([$id]); 
     $row = $stmt->fetch(PDO::FETCH_ASSOC); 
-    if (!$row) { http_response_code(404); echo json_encode(['error' => 'Not found']); 
-exit; } 
+    if (!$row) { 
+        http_response_code(404); 
+        echo json_encode(['error' => 'Не найдено']); 
+        exit; 
+    } 
     echo json_encode($row); 
     exit; 
 } 
 if ($method === 'POST') { 
-    if ($_SESSION['role'] !== 'admin') { http_response_code(403); echo 
-json_encode(['error' => 'Forbidden']); exit; } 
+    if ($_SESSION['role'] !== 'admin') { 
+        http_response_code(403); 
+        echo json_encode(['error' => 'Доступ запрещен']); 
+        exit; 
+    } 
     $name = $_POST['name'] ?? ''; 
     $description = $_POST['description'] ?? null; 
     $area = $_POST['area'] ?? null; 
     $population = $_POST['population'] ?? null; 
     $founded_year = $_POST['founded_year'] ?? null; 
     $image = null; 
-    if (!$name) { http_response_code(400); echo json_encode(['error' => 'Name is 
-required']); exit; } 
+    if (!$name) { 
+        http_response_code(400); 
+        echo json_encode(['error' => 'Название обязательно']); 
+        exit; 
+    } 
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) { 
         $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION); 
         $filename = uniqid('district_') . '.' . $ext; 
@@ -45,10 +54,8 @@ required']); exit; }
         move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename); 
         $image = $filename; 
     } 
-    $stmt = $pdo->prepare("INSERT INTO districts (name, description, area, 
-population, founded_year, image) VALUES (?, ?, ?, ?, ?, ?) RETURNING *"); 
-    $stmt->execute([$name, $description, $area, $population, $founded_year, 
-$image]); 
+    $stmt = $pdo->prepare("INSERT INTO districts (name, description, area, population, founded_year, image) VALUES (?, ?, ?, ?, ?, ?) RETURNING *"); 
+    $stmt->execute([$name, $description, $area, $population, $founded_year, $image]); 
     echo json_encode($stmt->fetch(PDO::FETCH_ASSOC)); 
     exit; 
 } 
@@ -65,7 +72,7 @@ if ($method === 'PUT') {
     }
     $name         = trim($_POST['name'] ?? '');
     $description  = trim($_POST['description'] ?? '');
-    $area         = $_POST['area']         !== '' ? $_POST['area']         : null;
+    $area         = $_POST['area']   !== '' ? $_POST['area']   : null;
     $population   = $_POST['population']   !== '' ? $_POST['population']   : null;
     $founded_year = $_POST['founded_year'] !== '' ? $_POST['founded_year'] : null;
     if (empty($name)) {
@@ -99,12 +106,15 @@ if ($method === 'PUT') {
     exit;
 }
 if ($method === 'DELETE' && $id) { 
-    if ($_SESSION['role'] !== 'admin') { http_response_code(403); echo 
-json_encode(['error' => 'Forbidden']); exit; } 
+    if ($_SESSION['role'] !== 'admin') { 
+        http_response_code(403); 
+        echo json_encode(['error' => 'Доступ запрещен']); 
+        exit; 
+    } 
     $stmt = $pdo->prepare("DELETE FROM districts WHERE id = ?"); 
     $stmt->execute([$id]); 
     echo json_encode(['success' => true]); 
     exit; 
 } 
 http_response_code(405); 
-echo json_encode(['error' => 'Method not allowed']);
+echo json_encode(['error' => 'Метод не поддерживается']);

@@ -8,5 +8,5 @@ if (!isset($_SESSION['user_id'])) {
 }
 if ($_SESSION['role'] !== 'admin') {
     http_response_code(403);
-    die(json_encode(['error' => 'Forbidden']));
+    die(json_encode(['error' => 'Запрещено']));
 }
